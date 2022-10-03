@@ -15,6 +15,7 @@ jobs:
     steps:
       - checkout
       - run: |
+          mkdir /tmp/dir
           echo "Hello, World!" > /tmp/dir/output.txt
           
       - persist_to_workspace:
