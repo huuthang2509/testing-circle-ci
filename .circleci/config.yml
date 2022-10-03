@@ -29,7 +29,10 @@ jobs:
       - checkout
       - run:
           name: "Print world"
-          command: "echo Welcome to ${MY_NAME} War World 3!"
+          command: "echo Welcome ${MY_NAME} to War World 3!"
+      - run:
+          name: "Print Env Var config in CirCi web app"
+          command: "echo What the ${MY_PROJ_NAME}"
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
