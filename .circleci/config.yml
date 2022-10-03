@@ -53,7 +53,8 @@ jobs:
 workflows:
   say-hello-workflow:
     jobs:
-      - say-hello
-      - print-world:
+      - say-hello-to-output
+      - print-output:
           requires:
-            - say-hello
+            - say-hello-to-output
+      - print-world
