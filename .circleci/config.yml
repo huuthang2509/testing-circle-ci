@@ -21,11 +21,15 @@ jobs:
   print-world:
     docker:
       - image: circleci/node:latest
+    environment:
+      # Define the environment variable
+      # See: https://circleci.com/docs/2.0/configuration-reference/#environment
+      MY_NAME: "Thang Dang"
     steps:
       - checkout
       - run:
           name: "Print world"
-          command: "echo War World 3!"
+          command: "echo Welcome to ${MY_NAME} War World 3!"
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
