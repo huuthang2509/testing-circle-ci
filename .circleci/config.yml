@@ -63,6 +63,7 @@ jobs:
       - run:
           name: "Print Env Var config in CirCi web app"
           command: "echo What the ${MY_PROJ_NAME}"
+          when: on_fail
 
   print_pipeline_id:
     docker:
@@ -80,7 +81,9 @@ workflows:
       #     requires:
       #       - say-hello-to-output
       - to-fail
-      - print-world
+      - print-world:
+          requires:
+            - to-fail
       - print_pipeline_id:
           requires:
             - print-world
