@@ -81,9 +81,7 @@ workflows:
       #     requires:
       #       - say-hello-to-output
       - to-fail
-      - print-world:
-          requires:
-            - to-fail
+      - print-world
       - print_pipeline_id:
           requires:
             - print-world
