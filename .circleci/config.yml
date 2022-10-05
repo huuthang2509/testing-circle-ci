@@ -2,10 +2,18 @@
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
+commands:
+  print_pipeline_id:
+    steps:
+      - run:
+          name: Print pipeline ID
+          command: "echo Pipeline ID: ${CIRCLE_WORKFLOW_ID}"
+          when: on_fail
+
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  say-hello:
+  say-hello-to-output:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
     docker:
@@ -14,13 +22,61 @@ jobs:
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
       - checkout
+      - run: |
+          mkdir /tmp/dir
+          echo "Hello, World!" > /tmp/dir/output.txt
+          
+      - persist_to_workspace:
+          root: /tmp/dir
+          paths:
+            - "*"
+
+  print-output:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - attach_workspace:
+          at: /tmp/dir
       - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
+          name: "Print output"
+          command: cat /tmp/dir/output.txt
+
+  print-world:
+    docker:
+      - image: circleci/node:latest
+    environment:
+      # Define the environment variable
+      # See: https://circleci.com/docs/2.0/configuration-reference/#environment
+      MY_NAME: "Thang Dang"
+    steps:
+      - checkout
+      - run:
+          return 1
+      - run:
+          name: "Print world"
+          command: "echo Welcome ${MY_NAME} to War World 3!"
+      - run:
+          name: "Print Env Var config in CirCi web app"
+          command: "echo What the ${MY_PROJ_NAME}"
+          when: on_fail
+      - print_pipeline_id
+
+  # print_pipeline_id:
+  #   docker:
+  #     - image: cimg/base:stable
+  #   steps:
+  #     - print_pipeline_id
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   say-hello-workflow:
     jobs:
-      - say-hello
+      # - say-hello-to-output
+      # - print-output:
+      #     requires:
+      #       - say-hello-to-output
+      - print-world
+      # - print_pipeline_id:
+      #     requires:
+      #       - print-world
