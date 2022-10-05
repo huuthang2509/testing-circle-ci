@@ -41,7 +41,7 @@ jobs:
           name: "Print output"
           command: cat /tmp/dir/output.txt
 
-  to_fail:
+  to-fail:
     docker:
       - image: circleci/node:13.8.0
     steps:
@@ -79,6 +79,7 @@ workflows:
       # - print-output:
       #     requires:
       #       - say-hello-to-output
+      - to-fail
       - print-world
       - print_pipeline_id:
           requires:
