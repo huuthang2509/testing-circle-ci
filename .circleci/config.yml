@@ -2,6 +2,13 @@
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
+commands:
+  print_pipeline_id:
+    steps:
+      - run:
+          name: Print pipeline ID
+          command: "echo Pipeline ID: ${CIRCLE_WORKFLOW_ID}"
+
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
@@ -49,13 +56,22 @@ jobs:
           name: "Print Env Var config in CirCi web app"
           command: "echo What the ${MY_PROJ_NAME}"
 
+  print_pipeline_id:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - print_pipeline_id
+
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   say-hello-workflow:
     jobs:
       - say-hello-to-output
-      - print-output:
+      - print-output:./
           requires:
             - say-hello-to-output
       - print-world
+      - print_pipeline_id:
+          requires:
+            - print-world
