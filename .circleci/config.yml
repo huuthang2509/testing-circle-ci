@@ -67,10 +67,10 @@ jobs:
 workflows:
   say-hello-workflow:
     jobs:
-      - say-hello-to-output
-      - print-output:./
-          requires:
-            - say-hello-to-output
+      # - say-hello-to-output
+      # - print-output:
+      #     requires:
+      #       - say-hello-to-output
       - print-world
       - print_pipeline_id:
           requires:
